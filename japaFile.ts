@@ -59,7 +59,7 @@ async function startBrowser() {
 
   global.BROWSER = await puppeteer.launch({
     headless: true,
-    // slowMo: 1000, // Slows down Puppeteer operations by the specified amount of milliseconds to aid debugging.
+    // slowMo: 100, // Slows down Puppeteer operations by the specified amount of milliseconds to aid debugging.
   })
 }
 

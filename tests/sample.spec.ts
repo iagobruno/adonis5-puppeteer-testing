@@ -13,31 +13,29 @@ test.group('/ (Home page)', (group) => {
     await page?.close()
   })
 
-  test('Deve conseguir renderizar a página inicial', async () => {
+  test('Should be able to render the home page', async () => {
     await page.goto(global.SERVER_HOST!)
 
-    const h1Text = await page.evaluate(() => document.querySelector('h1.title')!.textContent)
+    const h1Text = await page.$eval('h1.title', (h1) => h1.textContent)
 
     expect(h1Text).to.contain('It Works!')
   })
 
-  test('Deve conseguir ir para a página sobre', async () => {
+  test('Must link the about page', async () => {
     await page.goto(global.SERVER_HOST!)
 
-    const link = await page.$('#about-link')
-    await link!.click()
-
-    await page.waitForNavigation()
+    await Promise.all([
+      page.waitForNavigation(),
+      page.click('#about-link')
+    ])
 
     expect(page.url()).to.contain('/about')
 
-    await page.evaluate(() => document.querySelector('h1')!.textContent).then(text => {
-      expect(text).to.equal('ABOUT PAGE')
-    })
+    const h1Text = await page.$eval('h1', (h1) => h1.textContent)
+    expect(h1Text).to.equal('ABOUT PAGE')
 
-    await page.evaluate(() => document.querySelector('p')!.textContent).then(text => {
-      expect(text).to.contain('Lorem ipsum dolor')
-    })
+    const pText = await page.$eval('p', (p) => p.textContent)
+    expect(pText).to.contain('Lorem ipsum dolor')
   })
 
 })
